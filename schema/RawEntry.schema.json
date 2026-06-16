@@ -29,7 +29,8 @@
         "agent-color",
         "agent-setting",
         "mode",
-        "pr-link"
+        "pr-link",
+        "permission-mode"
       ],
       "description": "Discriminator field. New variants appear regularly in upstream Claude Code; treat unknown values as opaque payloads."
     },
@@ -112,7 +113,7 @@
     },
     "permissionMode": {
       "type": "string",
-      "enum": ["default", "acceptEdits", "plan", "bypassPermissions", "dontAsk"]
+      "enum": ["default", "acceptEdits", "plan", "bypassPermissions", "dontAsk", "auto"]
     },
     "worktreeSession": {
       "$ref": "./PersistedWorktreeSession.schema.json",

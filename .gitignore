@@ -5,3 +5,5 @@ dist/
 .env
 .env.local
 coverage/
+# Rust build artifacts (examples/rust is a self-contained cargo project)
+examples/rust/target/
