@@ -1,0 +1,17 @@
+[package]
+name = "session-store-analyzer"
+version = "0.1.0"
+edition = "2021"
+description = "Reference Rust consumer for @claude-code-local/session-store"
+license = "MIT"
+
+[[bin]]
+name = "analyze"
+path = "src/main.rs"
+
+[dependencies]
+# Schema validation
+jsonschema = { version = "0.17", default-features = false }
+serde_json = "1"
+
+# Lazy / minimal runtime deps; this is reference code.

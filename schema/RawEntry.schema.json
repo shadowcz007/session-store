@@ -1,0 +1,125 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://claude-code-local.dev/schemas/session-store/RawEntry.schema.json",
+  "title": "RawEntry",
+  "description": "Raw entry as parsed from a single JSONL line. The upstream format is intentionally open — additional fields appear with new upstream versions — so this schema uses additionalProperties: true at every level. Consumers in strict languages should treat unknown 'type' values as opaque JSON objects.",
+  "type": "object",
+  "required": ["type"],
+  "additionalProperties": true,
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "user",
+        "assistant",
+        "system",
+        "session-meta",
+        "custom-title",
+        "ai-title",
+        "worktree-state",
+        "file-history-snapshot",
+        "queue-operation",
+        "summary",
+        "last-prompt",
+        "attachment",
+        "content-replacement",
+        "task-summary",
+        "tag",
+        "agent-name",
+        "agent-color",
+        "agent-setting",
+        "mode",
+        "pr-link"
+      ],
+      "description": "Discriminator field. New variants appear regularly in upstream Claude Code; treat unknown values as opaque payloads."
+    },
+    "subtype": {
+      "type": "string",
+      "description": "Subtype for system entries (e.g. 'local_command', 'compact_boundary')."
+    },
+    "uuid": {
+      "type": "string",
+      "description": "Unique identifier for the entry; missing on metadata-only entries."
+    },
+    "messageId": {
+      "type": "string"
+    },
+    "parentUuid": {
+      "type": ["string", "null"]
+    },
+    "parent_tool_use_id": {
+      "type": ["string", "null"]
+    },
+    "isSidechain": {
+      "type": "boolean"
+    },
+    "isMeta": {
+      "type": "boolean",
+      "description": "True for CLI internal bookkeeping that should be filtered from user-facing views."
+    },
+    "cwd": {
+      "type": "string",
+      "description": "Working directory recorded for this entry."
+    },
+    "message": {
+      "type": "object",
+      "description": "Present on user/assistant entries. Shape depends on role.",
+      "additionalProperties": true,
+      "properties": {
+        "role": { "type": "string", "enum": ["user", "assistant", "system"] },
+        "content": {
+          "description": "Plain string, or an array of content blocks (text, tool_use, tool_result, image).",
+          "oneOf": [
+            { "type": "string" },
+            { "type": "array", "items": { "type": "object", "additionalProperties": true } }
+          ]
+        },
+        "model": { "type": "string" },
+        "id": { "type": "string" },
+        "type": { "type": "string" },
+        "usage": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "input_tokens": { "type": "integer" },
+            "output_tokens": { "type": "integer" },
+            "cache_read_input_tokens": { "type": "integer" },
+            "cache_creation_input_tokens": { "type": "integer" }
+          }
+        }
+      }
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "version": {
+      "type": "string",
+      "description": "Claude Code version that produced this entry."
+    },
+    "snapshot": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "messageId": { "type": "string" },
+        "trackedFileBackups": { "type": "object", "additionalProperties": true },
+        "timestamp": { "type": "string", "format": "date-time" }
+      }
+    },
+    "customTitle": {
+      "type": "string",
+      "description": "Title set by the user via renameSession."
+    },
+    "permissionMode": {
+      "type": "string",
+      "enum": ["default", "acceptEdits", "plan", "bypassPermissions", "dontAsk"]
+    },
+    "worktreeSession": {
+      "$ref": "./PersistedWorktreeSession.schema.json",
+      "description": "Worktree metadata, or null when torn down."
+    },
+    "title": {
+      "type": "string"
+    }
+  }
+}

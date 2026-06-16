@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://claude-code-local.dev/schemas/session-store/SessionLaunchInfo.schema.json",
+  "title": "SessionLaunchInfo",
+  "description": "Launch-time metadata recorded in session-meta JSONL entries.",
+  "type": "object",
+  "required": ["filePath", "projectDir", "workDir", "transcriptMessageCount", "customTitle"],
+  "additionalProperties": false,
+  "properties": {
+    "filePath": {
+      "type": "string",
+      "description": "Absolute path to the JSONL file."
+    },
+    "projectDir": {
+      "type": "string",
+      "description": "Sanitized project directory name."
+    },
+    "workDir": {
+      "type": "string",
+      "description": "Working directory the session was launched in."
+    },
+    "repository": {
+      "type": "object",
+      "description": "Repository metadata when the session was launched via a git repository.",
+      "additionalProperties": true,
+      "properties": {
+        "repoRoot": { "type": "string", "description": "Canonical repository root." },
+        "requestedWorkDir": { "type": "string", "description": "Workdir the user requested when launching." },
+        "branch": { "type": ["string", "null"], "description": "Selected branch." },
+        "worktree": { "type": "boolean", "description": "True when the session was launched in an isolated worktree." },
+        "worktreeSlug": { "type": ["string", "null"], "description": "Short worktree slug used in directory naming." },
+        "worktreeBranch": { "type": ["string", "null"], "description": "Branch checked out inside the worktree." },
+        "worktreePath": { "type": ["string", "null"], "description": "Absolute path to the worktree directory." }
+      }
+    },
+    "worktreeSession": {
+      "$ref": "./PersistedWorktreeSession.schema.json",
+      "description": "Worktree session metadata, or null when the session was torn down."
+    },
+    "transcriptMessageCount": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Number of transcript-eligible messages."
+    },
+    "customTitle": {
+      "type": ["string", "null"],
+      "description": "Last custom-title entry, or null when not set."
+    },
+    "permissionMode": {
+      "type": "string",
+      "enum": ["default", "acceptEdits", "plan", "bypassPermissions", "dontAsk"]
+    },
+    "runtimeProviderId": {
+      "type": ["string", "null"],
+      "description": "Provider ID used for the runtime (Anthropic, Bedrock, etc.)."
+    },
+    "runtimeModelId": {
+      "type": "string",
+      "description": "Model ID used at runtime (claude-opus-4-8, etc.)."
+    },
+    "effortLevel": {
+      "type": "string",
+      "enum": ["low", "medium", "high", "max"]
+    }
+  }
+}

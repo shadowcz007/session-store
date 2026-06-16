@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://claude-code-local.dev/schemas/session-store/TaskNotification.schema.json",
+  "title": "TaskNotification",
+  "description": "Parsed Task/Agent tool result. Populated by getSessionTaskNotifications() from any user entry whose content contains a <task-notification> XML block.",
+  "type": "object",
+  "required": ["taskId", "toolUseId", "status"],
+  "additionalProperties": false,
+  "properties": {
+    "taskId": {
+      "type": "string",
+      "description": "Unique identifier of the sub-task."
+    },
+    "toolUseId": {
+      "type": "string",
+      "description": "tool_use_id of the Agent/Task tool_use that produced this notification."
+    },
+    "status": {
+      "type": "string",
+      "enum": ["completed", "failed", "stopped"],
+      "description": "Final status of the task."
+    },
+    "summary": {
+      "type": "string",
+      "description": "Optional one-line summary emitted by the task."
+    },
+    "result": {
+      "type": "string",
+      "description": "Optional full result text."
+    },
+    "outputFile": {
+      "type": "string",
+      "description": "Optional path to a file containing the full task output."
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the notification was emitted."
+    }
+  }
+}

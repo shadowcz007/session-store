@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://claude-code-local.dev/schemas/session-store/index.schema.json",
+  "title": "session-store schema index",
+  "description": "Manifest of every JSON Schema file shipped by @claude-code-local/session-store. The on-disk JSONL format is intentionally open (additional properties are allowed on RawEntry) so this schema list may grow over time.",
+  "type": "object",
+  "required": ["version", "schemas"],
+  "additionalProperties": false,
+  "properties": {
+    "version": {
+      "type": "string",
+      "description": "Semver of the schema bundle. Bumped whenever a new entry type or shape is added."
+    },
+    "schemas": {
+      "type": "array",
+      "description": "Catalog of every schema in the bundle.",
+      "items": {
+        "type": "object",
+        "required": ["name", "$id", "path"],
+        "additionalProperties": false,
+        "properties": {
+          "name": { "type": "string", "description": "Type name as exported from the TypeScript API." },
+          "$id": { "type": "string", "format": "uri", "description": "Canonical URI for cross-language resolution." },
+          "path": { "type": "string", "description": "Path relative to this index file." }
+        }
+      }
+    }
+  },
+  "version": "0.1.0",
+  "schemas": [
+    { "name": "SessionListItem", "$id": "https://claude-code-local.dev/schemas/session-store/SessionListItem.schema.json", "path": "./SessionListItem.schema.json" },
+    { "name": "SessionDetail", "$id": "https://claude-code-local.dev/schemas/session-store/SessionDetail.schema.json", "path": "./SessionDetail.schema.json" },
+    { "name": "SessionLaunchInfo", "$id": "https://claude-code-local.dev/schemas/session-store/SessionLaunchInfo.schema.json", "path": "./SessionLaunchInfo.schema.json" },
+    { "name": "MessageEntry", "$id": "https://claude-code-local.dev/schemas/session-store/MessageEntry.schema.json", "path": "./MessageEntry.schema.json" },
+    { "name": "RawEntry", "$id": "https://claude-code-local.dev/schemas/session-store/RawEntry.schema.json", "path": "./RawEntry.schema.json" },
+    { "name": "FileHistorySnapshot", "$id": "https://claude-code-local.dev/schemas/session-store/FileHistorySnapshot.schema.json", "path": "./FileHistorySnapshot.schema.json" },
+    { "name": "PersistedWorktreeSession", "$id": "https://claude-code-local.dev/schemas/session-store/PersistedWorktreeSession.schema.json", "path": "./PersistedWorktreeSession.schema.json" },
+    { "name": "TaskNotification", "$id": "https://claude-code-local.dev/schemas/session-store/TaskNotification.schema.json", "path": "./TaskNotification.schema.json" }
+  ]
+}

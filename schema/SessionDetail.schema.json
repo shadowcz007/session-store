@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://claude-code-local.dev/schemas/session-store/SessionDetail.schema.json",
+  "title": "SessionDetail",
+  "description": "Full session payload returned by scanSession(). Extends SessionListItem with the messages array, file-history snapshots, and launch info. Note: this schema deliberately allows additionalProperties to accommodate fields defined in SessionListItem; for strict validation in cross-language consumers, validate SessionListItem fields separately.",
+  "type": "object",
+  "required": [
+    "id",
+    "sanitizedProjectPath",
+    "title",
+    "createdAt",
+    "modifiedAt",
+    "messageCount",
+    "sizeBytes",
+    "workDirExists",
+    "messages",
+    "fileHistorySnapshots"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "id": { "type": "string" },
+    "sanitizedProjectPath": { "type": "string" },
+    "projectPath": { "type": ["string", "null"] },
+    "title": { "type": "string" },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "modifiedAt": { "type": "string", "format": "date-time" },
+    "messageCount": { "type": "integer", "minimum": 0 },
+    "sizeBytes": { "type": "integer", "minimum": 0 },
+    "customTitle": { "type": "string" },
+    "aiTitle": { "type": "string" },
+    "firstUserMessage": { "type": "string" },
+    "gitRoot": { "type": "string" },
+    "worktreeSession": { "$ref": "./PersistedWorktreeSession.schema.json" },
+    "permissionMode": {
+      "type": "string",
+      "enum": ["default", "acceptEdits", "plan", "bypassPermissions", "dontAsk"]
+    },
+    "workDirExists": { "type": "boolean" },
+    "messages": {
+      "type": "array",
+      "description": "Flattened messages. Subagent tool_use and tool_result messages are inlined when includeSubagentMessages is true (the default).",
+      "items": { "$ref": "./MessageEntry.schema.json" }
+    },
+    "fileHistorySnapshots": {
+      "type": "array",
+      "description": "File-history snapshots recorded during the session, in file order.",
+      "items": { "$ref": "./FileHistorySnapshot.schema.json" }
+    },
+    "launchInfo": {
+      "$ref": "./SessionLaunchInfo.schema.json",
+      "description": "Launch-time metadata (model, permission mode, cwd, repository)."
+    }
+  }
+}

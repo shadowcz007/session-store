@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://claude-code-local.dev/schemas/session-store/SessionListItem.schema.json",
+  "title": "SessionListItem",
+  "description": "Lightweight summary returned by scanProjects(). Designed for list views; does not include the full messages array.",
+  "type": "object",
+  "required": ["id", "sanitizedProjectPath", "title", "createdAt", "modifiedAt", "messageCount", "sizeBytes", "workDirExists"],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+      "description": "UUID of the session. Matches the JSONL filename without extension."
+    },
+    "sanitizedProjectPath": {
+      "type": "string",
+      "description": "Sanitized project directory name (matches the on-disk folder under ~/.claude/projects/)."
+    },
+    "projectPath": {
+      "type": ["string", "null"],
+      "description": "Best-effort desanitized absolute project path. Null when desanitization is ambiguous."
+    },
+    "title": {
+      "type": "string",
+      "description": "Session title (customTitle > goal > ai > firstUser; 'Untitled Session' fallback)."
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "First timestamp found in the transcript, falling back to file birthtime."
+    },
+    "modifiedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "File mtime."
+    },
+    "messageCount": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Number of user/assistant/system messages in the transcript."
+    },
+    "sizeBytes": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "On-disk file size in bytes."
+    },
+    "customTitle": {
+      "type": "string",
+      "description": "Optional user-set title (distinct from AI-generated)."
+    },
+    "aiTitle": {
+      "type": "string",
+      "description": "Optional AI-generated title."
+    },
+    "firstUserMessage": {
+      "type": "string",
+      "description": "First non-meta user message text, truncated to 80 chars."
+    },
+    "gitRoot": {
+      "type": "string",
+      "description": "Git root of the working directory; only populated when findGitRoot was supplied."
+    },
+    "worktreeSession": {
+      "$ref": "./PersistedWorktreeSession.schema.json",
+      "description": "Worktree metadata if the session ran inside an isolated worktree."
+    },
+    "permissionMode": {
+      "type": "string",
+      "enum": ["default", "acceptEdits", "plan", "bypassPermissions", "dontAsk"],
+      "description": "Effective permission mode for the session."
+    },
+    "workDirExists": {
+      "type": "boolean",
+      "description": "True when the session's working directory still exists on disk."
+    }
+  }
+}

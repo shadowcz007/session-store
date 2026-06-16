@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://claude-code-local.dev/schemas/session-store/PersistedWorktreeSession.schema.json",
+  "title": "PersistedWorktreeSession",
+  "description": "Worktree session metadata recorded in worktree-state JSONL entries. When the worktree was torn down, the entry carries null instead of an object.",
+  "type": "object",
+  "required": ["originalCwd", "worktreePath", "worktreeName", "sessionId"],
+  "additionalProperties": false,
+  "properties": {
+    "originalCwd": {
+      "type": "string",
+      "description": "cwd recorded when the session was launched (the parent repo, not the worktree)."
+    },
+    "worktreePath": {
+      "type": "string",
+      "description": "Absolute path to the worktree directory."
+    },
+    "worktreeName": {
+      "type": "string",
+      "description": "Short name of the worktree (used in path/branch)."
+    },
+    "worktreeBranch": {
+      "type": "string",
+      "description": "Branch checked out inside the worktree."
+    },
+    "originalBranch": {
+      "type": "string",
+      "description": "Branch in the parent repo before the worktree was created."
+    },
+    "originalHeadCommit": {
+      "type": "string",
+      "description": "Head commit of the parent repo at worktree creation time."
+    },
+    "sessionId": {
+      "type": "string",
+      "description": "UUID of the session that created the worktree."
+    },
+    "tmuxSessionName": {
+      "type": "string",
+      "description": "tmux session name when hook-based isolation is in use."
+    },
+    "hookBased": {
+      "type": "boolean",
+      "description": "True when the worktree is managed by Claude Code hooks rather than the desktop app."
+    }
+  }
+}

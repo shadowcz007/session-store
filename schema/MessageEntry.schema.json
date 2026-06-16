@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://claude-code-local.dev/schemas/session-store/MessageEntry.schema.json",
+  "title": "MessageEntry",
+  "description": "Normalized message shape used in SessionDetail.messages. The 'type' field is a normalized discriminator: 'tool_use' when the assistant content has any tool_use block; 'tool_result' when user content has any tool_result block; otherwise 'user'/'assistant'/'system'.",
+  "type": "object",
+  "required": ["id", "type", "content", "timestamp"],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Entry uuid from the JSONL, or a generated UUID when missing."
+    },
+    "type": {
+      "type": "string",
+      "enum": ["user", "assistant", "system", "tool_use", "tool_result"],
+      "description": "Normalized message type."
+    },
+    "content": {
+      "description": "Original message content. Plain string for text messages, or structured content blocks for tool_use/tool_result.",
+      "oneOf": [
+        { "type": "string" },
+        { "type": "array", "items": { "type": "object", "additionalProperties": true } }
+      ]
+    },
+    "toolUseResult": {
+      "description": "Optional result payload attached to tool_use messages.",
+      "additionalProperties": true
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "model": {
+      "type": "string",
+      "description": "Model that produced the message (assistant messages only)."
+    },
+    "parentUuid": {
+      "type": "string",
+      "description": "uuid of the preceding message in the transcript."
+    },
+    "parentToolUseId": {
+      "type": "string",
+      "description": "For sidechain messages, the Agent tool_use_id that spawned them."
+    },
+    "isSidechain": {
+      "type": "boolean",
+      "description": "True when the message belongs to an Agent/Task sidechain."
+    }
+  }
+}

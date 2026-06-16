@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://claude-code-local.dev/schemas/session-store/FileHistorySnapshot.schema.json",
+  "title": "FileHistorySnapshot",
+  "description": "Snapshot of tracked file backups at a given point in the transcript. Consumed by the diff viewer to show what the assistant changed.",
+  "type": "object",
+  "required": ["messageId", "trackedFileBackups", "timestamp"],
+  "additionalProperties": false,
+  "properties": {
+    "messageId": {
+      "type": "string",
+      "description": "Message ID associated with this snapshot."
+    },
+    "trackedFileBackups": {
+      "type": "object",
+      "description": "Map of absolute file paths to backup metadata.",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["backupFileName", "version", "backupTime"],
+        "additionalProperties": false,
+        "properties": {
+          "backupFileName": {
+            "type": ["string", "null"],
+            "description": "Absolute path of the backup file, or null when the file did not exist in this version."
+          },
+          "version": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Monotonic version number for this file."
+          },
+          "backupTime": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      }
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}
